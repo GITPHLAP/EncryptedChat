@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ChatClient
+namespace ChatClientApp
 {
     internal class Program
     {
