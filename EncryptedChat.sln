@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatClientServer", "ChatCli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatModels", "ChatModels\ChatModels.csproj", "{30D8C7CF-90DC-4F88-8BA1-8B1FD3D8C617}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoLibrary", "CryptoLibrary\CryptoLibrary.csproj", "{BBEEDE3E-2CD7-4A3B-AEC1-E327F56826C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{30D8C7CF-90DC-4F88-8BA1-8B1FD3D8C617}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30D8C7CF-90DC-4F88-8BA1-8B1FD3D8C617}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30D8C7CF-90DC-4F88-8BA1-8B1FD3D8C617}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBEEDE3E-2CD7-4A3B-AEC1-E327F56826C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBEEDE3E-2CD7-4A3B-AEC1-E327F56826C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBEEDE3E-2CD7-4A3B-AEC1-E327F56826C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBEEDE3E-2CD7-4A3B-AEC1-E327F56826C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
