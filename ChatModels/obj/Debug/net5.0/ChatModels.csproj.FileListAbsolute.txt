@@ -1,0 +1,12 @@
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\bin\Debug\net5.0\ChatModels.deps.json
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\bin\Debug\net5.0\ChatModels.dll
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\bin\Debug\net5.0\ChatModels.pdb
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ChatModels.csproj.AssemblyReference.cache
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ChatModels.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ChatModels.AssemblyInfoInputs.cache
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ChatModels.AssemblyInfo.cs
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ChatModels.csproj.CoreCompileInputs.cache
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ChatModels.dll
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\refint\ChatModels.dll
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ChatModels.pdb
+C:\Users\krj\Documents\Github\EncryptedChat\ChatModels\obj\Debug\net5.0\ref\ChatModels.dll

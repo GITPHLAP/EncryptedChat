@@ -19,5 +19,6 @@ namespace ChatClientServer
             Name = name;
             PublicKey = publicKey;
         }
+
     }
 }

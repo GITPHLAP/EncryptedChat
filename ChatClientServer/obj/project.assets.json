@@ -1,30 +1,86 @@
 {
   "version": 3,
   "targets": {
-    "net5.0": {}
+    "net5.0": {
+      "Newtonsoft.Json/13.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {}
+        }
+      },
+      "ChatModels/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/ChatModels.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ChatModels.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Newtonsoft.Json/13.0.1": {
+      "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.1.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
+    "ChatModels/1.0.0": {
+      "type": "project",
+      "path": "../ChatModels/ChatModels.csproj",
+      "msbuildProject": "../ChatModels/ChatModels.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net5.0": []
+    "net5.0": [
+      "ChatModels >= 1.0.0",
+      "Newtonsoft.Json >= 13.0.1"
+    ]
   },
   "packageFolders": {
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\": {},
+    "C:\\Users\\krj\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jonas.hansen\\source\\repos\\EncryptedChat\\ChatClientServer\\ChatClientServer.csproj",
+      "projectUniqueName": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatClientServer\\ChatClientServer.csproj",
       "projectName": "ChatClientServer",
-      "projectPath": "C:\\Users\\jonas.hansen\\source\\repos\\EncryptedChat\\ChatClientServer\\ChatClientServer.csproj",
-      "packagesPath": "C:\\Users\\jonas.hansen\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jonas.hansen\\source\\repos\\EncryptedChat\\ChatClientServer\\obj\\",
+      "projectPath": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatClientServer\\ChatClientServer.csproj",
+      "packagesPath": "C:\\Users\\krj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatClientServer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\jonas.hansen\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\krj\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -33,13 +89,16 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {},
-        "https://nuget.e-conomic.net/token/FUpdl3AdNBRdy8Cj1LYpKECSvbXSBjHO/": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatModels\\ChatModels.csproj": {
+              "projectPath": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatModels\\ChatModels.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -51,6 +110,12 @@
     "frameworks": {
       "net5.0": {
         "targetAlias": "net5.0",
+        "dependencies": {
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.1, )"
+          }
+        },
         "imports": [
           "net461",
           "net462",
@@ -61,18 +126,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[5.0.17, 5.0.17]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.105\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
       }
     }
   }

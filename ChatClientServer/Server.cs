@@ -1,9 +1,12 @@
-﻿using System;
+﻿using ChatModels;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChatClientServer
@@ -13,6 +16,7 @@ namespace ChatClientServer
         bool running = false;
         Socket serverSocket;
         List<User> users = new List<User>();
+        List<Thread> threads = new List<Thread>();
 
         public void Start(IPAddress address, int port)
         {
@@ -38,12 +42,19 @@ namespace ChatClientServer
                 {
                     clientSocket = serverSocket.Accept();
                     //RequestHandler(clientSocket);
+
+                    //Get the connection message from client
                     byte[] buffer = new byte[256];
-                     clientSocket.Receive(buffer);
-                    User user = new User(clientSocket,"","");
+                    string receivedJson = Encoding.UTF8.GetString(buffer, 0, clientSocket.Receive(buffer));
+
+                    ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
+
+                    User user = new User(clientSocket, pack.Name, pack.PublicKey);
+
                     users.Add(user);
-                    Console.WriteLine("Client connected");
                     
+                    Console.WriteLine("Client connected");
+
                 }
                 catch (Exception e)
                 {

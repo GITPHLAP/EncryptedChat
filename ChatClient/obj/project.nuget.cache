@@ -1,10 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "x0r4WIhSAkSkZu2aRS1JEsTIjKiqNtGLSuugNP3OL4aYJCqAOf08+HXdROmJET7hfxNiydkcwzbzM9xR4PPLaA==",
+  "dgSpecHash": "6gPcz/bB5HQrMT+1ArgixvJRcDyrbHfHkuvKA8M37p9KU8JoIFx0uokqG4z0ECKybZWOII9CNwr3RC2r5/tX+g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jonas.hansen\\source\\repos\\EncryptedChat\\ChatClient\\ChatClientApp.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.17\\microsoft.netcore.app.host.win-x64.5.0.17.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatClient\\ChatClientApp.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
