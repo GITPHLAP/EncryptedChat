@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jonas.hansen\\source\\repos\\EncryptedChat\\ChatClient\\ChatClientApp.csproj",
-      "projectName": "ChatClientApp",
-      "projectPath": "C:\\Users\\jonas.hansen\\source\\repos\\EncryptedChat\\ChatClient\\ChatClientApp.csproj",
-      "packagesPath": "C:\\Users\\jonas.hansen\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jonas.hansen\\source\\repos\\EncryptedChat\\ChatClient\\obj\\",
+      "projectUniqueName": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatModels\\ChatModels.csproj",
+      "projectName": "ChatModels",
+      "projectPath": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatModels\\ChatModels.csproj",
+      "packagesPath": "C:\\Users\\krj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\krj\\Documents\\Github\\EncryptedChat\\ChatModels\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
