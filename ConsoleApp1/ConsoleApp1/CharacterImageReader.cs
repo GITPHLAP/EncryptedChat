@@ -16,7 +16,7 @@ namespace ConsoleApp1
             Bitmap bitmap = new(imagePath);
             if (bitmap.Width > 24 || bitmap.Height > 24)
             {
-                bitmap = ResizeImage(bitmap, new Size(24 * 2, 24 * 2));
+                bitmap = ResizeImage(bitmap, new Size(32, 32));
             }
             CharacterImage characterImage = new CharacterImage();
             characterImage.Width = bitmap.Width;
@@ -55,6 +55,14 @@ namespace ConsoleApp1
                 if (lum <= lumKey)
                 {
                     characterPixel.Character = lumCharacters[lumKey];
+                    if (lum < 128)
+                    {
+                        characterPixel.Color = Engine.Color.Silver;
+                    }
+                    else
+                    {
+                        characterPixel.Color = Engine.Color.Get(Engine.Color.White, Engine.Color.Silver);
+                    }
                     break;
                 }
             }
