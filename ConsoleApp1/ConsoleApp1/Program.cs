@@ -10,20 +10,23 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             ConsoleEx.Create(128, 128);
-            ConsoleEx.SetFont("Consolas", 8, 8);
-            ConsoleEx.WriteLine("Test");
+            ConsoleEx.SetFont("Consolas", 8, 16);
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.ShowDialog();
             CharacterImage characterImage = CharacterImageReader.LoadFromImage(openFileDialog.FileName);
 
-            for (int y = 0; y < characterImage.Height; y++)
+            while (true)
             {
-                for (int x = 0; x < characterImage.Width; x++)
+                for (int y = 0; y < characterImage.Height; y++)
                 {
-                    ConsoleEx.Write($"{characterImage.CharacterPixels[x, y].Character}");
+                    for (int x = 0; x < characterImage.Width; x++)
+                    {
+                        ConsoleEx.Write($"{characterImage.CharacterPixels[x, y].Character}", characterImage.CharacterPixels[x, y].Color);
+                    }
+                    ConsoleEx.WriteLine();
                 }
-                ConsoleEx.WriteLine();
+                ConsoleEx.Update();
             }
         }
     }
