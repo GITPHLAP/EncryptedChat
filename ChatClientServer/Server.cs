@@ -44,9 +44,9 @@ namespace ChatClientServer
                     //RequestHandler(clientSocket);
 
                     Console.WriteLine("Client connected");
+
                     //Get the connection message from client
-                    byte[] buffer = new byte[256];
-                    string receivedJson = Encoding.UTF8.GetString(buffer, 0, clientSocket.Receive(buffer));
+                    string receivedJson = ReceiveFromSocket(clientSocket);
 
 
                     //ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
@@ -56,6 +56,7 @@ namespace ChatClientServer
 
                     users.Add(user);
 
+                    //Create a thread for receiving messages from new the client
                     Thread thread = new Thread(() => WaitForMessage(user));
 
                     threads.Add(thread);
@@ -82,10 +83,10 @@ namespace ChatClientServer
                     Console.WriteLine("Message received: " + socketMessage);
 
                     //Decrypt message
-                    string messageToSend = $"{user.Name}: {socketMessage}";
+                    string messageToSend = $"{socketMessage}";
 
                     //Send the message to all clients connected
-                    foreach (var item in users.Where(x => x.ClientSocket.Connected == true))
+                    foreach (var item in users.Where(x => x.ClientSocket.Connected == true && x != user))
                     {
                         try
                         {
