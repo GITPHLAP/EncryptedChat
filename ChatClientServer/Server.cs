@@ -43,18 +43,26 @@ namespace ChatClientServer
                     clientSocket = serverSocket.Accept();
                     //RequestHandler(clientSocket);
 
+                    Console.WriteLine("Client connected");
                     //Get the connection message from client
                     byte[] buffer = new byte[256];
                     string receivedJson = Encoding.UTF8.GetString(buffer, 0, clientSocket.Receive(buffer));
 
-                    ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
 
-                    User user = new User(clientSocket, pack.Name, pack.PublicKey);
+                    //ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
+
+                    //User user = new User(clientSocket, pack.Name, pack.PublicKey);
+                    User user = new User(clientSocket, "Jens", "1234");
 
                     users.Add(user);
-                    
-                    Console.WriteLine("Client connected");
 
+                    Thread thread = new Thread(() => WaitForMessage(user));
+
+                    threads.Add(thread);
+
+                    thread.Start();
+
+                    Console.WriteLine("started thread");
                 }
                 catch (Exception e)
                 {
@@ -62,6 +70,54 @@ namespace ChatClientServer
                 }
 
             }
+        }
+        void WaitForMessage(User user)
+        {
+            //Run this while socket connected
+            try
+            {
+                while (user.ClientSocket.Connected)
+                {
+                    string socketMessage = ReceiveFromSocket(user.ClientSocket);
+                    Console.WriteLine("Message received: " + socketMessage);
+
+                    //Decrypt message
+                    string messageToSend = $"{user.Name}: {socketMessage}";
+
+                    //Send the message to all clients connected
+                    foreach (var item in users.Where(x => x.ClientSocket.Connected == true))
+                    {
+                        try
+                        {
+                            //TODO: Decrypt message with the users own public key
+                            item.ClientSocket.Send(Encoding.UTF8.GetBytes(messageToSend));
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Could not send message to client: " + ex.Message);
+                            users.Remove(item);
+                        }
+                    }
+
+                }
+                Console.WriteLine($"Client {user.Name} disconnected");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Socket error: " + e.Message);
+            }
+            //Remove the user from the list when it is disconnected
+            users.Remove(user);
+        }
+        string ReceiveFromSocket(Socket client)
+        {
+            byte[] buffer = new byte[256];
+            //Wait for messsage from client
+            int receivedBCount = client.Receive(buffer);
+
+            //Convert to string
+            return Encoding.UTF8.GetString(buffer, 0, receivedBCount);
+
         }
 
         void RequestHandler(Socket clientSocket)
