@@ -1,4 +1,5 @@
-﻿using Engine;
+﻿using ChatClientApp.Chat;
+using Engine;
 using System.Collections.Generic;
 
 namespace ChatClientApp
@@ -8,9 +9,11 @@ namespace ChatClientApp
         static string username = null;
         static string inputStr = "";
         static List<string> messages = new List<string>();
+        static ChatClient chatClient = null;
 
-        static void Main(string[] args)
+        static void Main()
         {
+
             ConsoleEx.Create(64, 16);
             ConsoleEx.SetFont("Consolas", 16, 32);
 
@@ -43,6 +46,9 @@ namespace ChatClientApp
                 username = inputStr;
                 inputStr = "";
 
+                chatClient = new ChatClient(username);
+                chatClient.StartListen();
+
                 ConsoleEx.Create(128, 32);
                 ConsoleEx.SetFont("Consolas", 8, 16);
             }
@@ -50,7 +56,7 @@ namespace ChatClientApp
 
         static void ChatView()
         {
-            foreach (string message in messages)
+            foreach (string message in chatClient.Messages)
             {
                 ConsoleEx.WriteLine(message);
             }
@@ -60,7 +66,8 @@ namespace ChatClientApp
 
             if (Input.KeyPressed(Key.RETURN))
             {
-                messages.Add(username + ": " + inputStr);
+                string message = username + ": " + inputStr;
+                chatClient.SendMessage(message);
                 inputStr = "";
             }
 

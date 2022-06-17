@@ -9,7 +9,7 @@ namespace ChatClientServer
 {
     public class User
     {
-        public Socket ClientSocket { get => ClientSocket; set => ClientSocket = value; }
+        public Socket ClientSocket { get; set; }
         public string Name { get; set; }
         public string PublicKey { get; set; }
 
