@@ -1,11 +1,6 @@
 ﻿using ChatClientApp.Chat;
 using Engine;
-using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 
 namespace ChatClientApp
 {
@@ -59,7 +54,7 @@ namespace ChatClientApp
 
         static void ChatView()
         {
-            foreach (string message in messages)
+            foreach (string message in chatClient.Messages)
             {
                 ConsoleEx.WriteLine(message);
             }
@@ -71,7 +66,6 @@ namespace ChatClientApp
             {
                 string message = username + ": " + inputStr;
                 chatClient.SendMessage(message);
-                messages.Add(username + ": " + inputStr);
                 inputStr = "";
             }
 

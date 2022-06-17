@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Engine
 {
@@ -18,7 +19,7 @@ namespace Engine
             Triggered,
             Locked,
         }
-
+ 
         private static InputState[] keyMap = new InputState[255];
         private static int[] keyCounter = new int[255];
 

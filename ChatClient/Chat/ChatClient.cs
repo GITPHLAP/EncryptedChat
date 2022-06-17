@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ChatClientApp.Chat
 {
@@ -18,14 +12,17 @@ namespace ChatClientApp.Chat
             MaxBufferSize = 1024;
         }
 
+        public Queue<string> Messages { get; private set; } = new Queue<string>();
+
         public void SendMessage(string message)
         {
             SendRequest(message);
+            Messages.Enqueue(message);
         }
 
         protected override void ClientInfo(string message)
         {
-            Console.WriteLine($"<{DateTime.Now}> " + message);
+            //Console.WriteLine($"<{DateTime.Now}> " + message);
         }
 
         protected override string InitialRequestData()
@@ -35,7 +32,7 @@ namespace ChatClientApp.Chat
 
         protected override void ServerResponse(string response)
         {
-            ClientInfo(response);
+            Messages.Enqueue(response);
         }
     }
 }

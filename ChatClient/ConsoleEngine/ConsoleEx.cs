@@ -197,6 +197,7 @@ namespace Engine
         [DllImport("kernel32.dll")]
         private static extern bool SetConsoleOutputCP(uint wCodePageID);
 
+
         private static Coord cStart;
         private static Coord cEnd;
         private static SmallRect windowRect;
