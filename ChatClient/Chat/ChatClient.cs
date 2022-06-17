@@ -1,4 +1,5 @@
 ﻿using ChatModels;
+using System;
 using System.Collections.Generic;
 
 namespace ChatClientApp.Chat
@@ -7,8 +8,8 @@ namespace ChatClientApp.Chat
     {
         public ChatClient()
         {
-            IPAddress = IPAddressUtillity.GetLocalIPAddress();
-            Port = 8080;
+            IPAddress = System.Net.IPAddress.Parse("80.71.140.165");
+            Port = 11753;
             MaxBufferSize = 1024;
         }
 
