@@ -6,13 +6,27 @@ namespace CryptoLibrary
 {
     public class CryptoManager
     {
-
         /// <summary>
         /// Create private/public key pair 
+        /// </summary>
+        /// <returns>Public/Private Keypair</returns>
+        public static RSACryptoServiceProvider GetKeyPair()
+        {
+            RSACryptoServiceProvider _rsa;
+
+            // Create both public and private key
+            _rsa = new RSACryptoServiceProvider(2048);
+
+            return _rsa;
+        }
+
+
+        /// <summary>
+        /// <inheritdoc cref="GetKeyPair"/>
         /// With the defined publickey
         /// </summary>
         /// <param name="publicKey"> XML string of the public key</param>
-        /// <returns>KeyPair</returns>
+        /// <returns>Public/Private Keypair</returns>
         public static RSACryptoServiceProvider GetKeyPair(string publicKey)
         {
             RSACryptoServiceProvider _rsa;
