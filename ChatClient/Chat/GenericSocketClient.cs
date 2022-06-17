@@ -42,20 +42,26 @@ namespace ChatClientApp
             }
         }
 
+        protected void SendRequest(string request)
+        {
+            clientSocket.Send(Encoding.UTF8.GetBytes(request));
+        }
         protected abstract void ClientInfo(string message);
-        protected abstract void SendInitialRequest(Socket clientSocket);
-        protected abstract void SendRequest(string response, Socket clientSocket);
+        protected abstract string InitialRequestData();
+        protected abstract void ServerResponse(string response);
 
         private void ClientThreadEntry()
         {
             ClientInfo($"Client started listening on port {Port}");
 
-            SendInitialRequest(clientSocket);
+            string initialRequestData = InitialRequestData();
+            SendRequest(initialRequestData);
             while (IsRunning)
             {
                 byte[] responseBuffer = new byte[MaxBufferSize];
                 int responseSize = clientSocket.Receive(responseBuffer);
-                SendRequest(Encoding.UTF8.GetString(responseBuffer, 0, responseSize), clientSocket);
+
+                ServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
             }
         }
     }

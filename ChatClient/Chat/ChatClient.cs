@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ChatClientApp
+namespace ChatClientApp.Chat
 {
     internal class ChatClient : GenericSocketClient
     {
@@ -17,21 +18,24 @@ namespace ChatClientApp
             MaxBufferSize = 1024;
         }
 
+        public void SendMessage(string message)
+        {
+            SendRequest(message);
+        }
+
         protected override void ClientInfo(string message)
         {
             Console.WriteLine($"<{DateTime.Now}> " + message);
         }
 
-        protected override void SendInitialRequest(Socket clientSocket)
+        protected override string InitialRequestData()
         {
-            clientSocket.Send(Encoding.UTF8.GetBytes("Clients initial request"));
+            return "Clients initial request";
         }
 
-        protected override void SendRequest(string response, Socket clientSocket)
+        protected override void ServerResponse(string response)
         {
             ClientInfo(response);
-            Thread.Sleep(1000);
-            clientSocket.Send(Encoding.UTF8.GetBytes("Some client data"));
         }
     }
 }
