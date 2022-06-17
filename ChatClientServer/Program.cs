@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatModels;
+using System;
 using System.Net;
 
 namespace ChatClientServer
@@ -9,7 +10,7 @@ namespace ChatClientServer
         {
             Console.WriteLine("Hello World!");
             Server server = new Server();
-            server.Start(IPAddress.Parse("192.168.1.107"),8080);
+            server.Start(IPAddressUtillity.GetLocalIPAddress(),8080);
         }
     }
 }
