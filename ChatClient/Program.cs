@@ -1,5 +1,10 @@
 ﻿using Engine;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace ChatClientApp
 {
@@ -11,23 +16,26 @@ namespace ChatClientApp
 
         static void Main(string[] args)
         {
-            ConsoleEx.Create(64, 16);
-            ConsoleEx.SetFont("Consolas", 16, 32);
+            ChatClient chatClient = new ChatClient();
+            chatClient.StartListen();
 
-            while (true)
-            {
-                if (username == null)
-                {
-                    UsernameView();
-                }
-                else
-                {
-                    ChatView();
-                }
+            //ConsoleEx.Create(64, 16);
+            //ConsoleEx.SetFont("Consolas", 16, 32);
 
-                ConsoleEx.Update();
-                ConsoleEx.Clear();
-            }
+            //while (true)
+            //{
+            //    if (username == null)
+            //    {
+            //        UsernameView();
+            //    }
+            //    else
+            //    {
+            //        ChatView();
+            //    }
+
+            //    ConsoleEx.Update();
+            //    ConsoleEx.Clear();
+            //}
         }
 
         static void UsernameView()
