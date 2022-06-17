@@ -10,7 +10,7 @@ namespace ChatClientServer
         {
             Console.WriteLine("Hello World!");
             Server server = new Server();
-            server.Start(IPAddressUtillity.GetLocalIPAddress(),8080);
+            server.Start(IPAddressUtillity.GetLocalIPAddress(), 11753);
         }
     }
 }
