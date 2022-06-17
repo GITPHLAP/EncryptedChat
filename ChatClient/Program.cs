@@ -9,11 +9,10 @@ namespace ChatClientApp
         static string username = null;
         static string inputStr = "";
         static List<string> messages = new List<string>();
-        static ChatClient chatClient = new();
+        static ChatClient chatClient = null;
 
         static void Main()
         {
-            chatClient.StartListen();
 
             ConsoleEx.Create(64, 16);
             ConsoleEx.SetFont("Consolas", 16, 32);
@@ -46,6 +45,9 @@ namespace ChatClientApp
             {
                 username = inputStr;
                 inputStr = "";
+
+                chatClient = new ChatClient(username);
+                chatClient.StartListen();
 
                 ConsoleEx.Create(128, 32);
                 ConsoleEx.SetFont("Consolas", 8, 16);

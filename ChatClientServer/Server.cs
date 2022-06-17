@@ -49,10 +49,9 @@ namespace ChatClientServer
                     string receivedJson = ReceiveFromSocket(clientSocket);
 
 
-                    //ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
-
-                    //User user = new User(clientSocket, pack.Name, pack.PublicKey);
-                    User user = new User(clientSocket, "Jens", "1234");
+                    ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
+                    User user = new User(clientSocket, pack.Name, pack.PublicKey);
+                    //User user = new User(clientSocket, "Jens", "1234");
 
                     users.Add(user);
 
