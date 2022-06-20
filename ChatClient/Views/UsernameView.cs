@@ -28,6 +28,7 @@ namespace ChatClientApp.Views
 
         public override void Drawing()
         {
+            // Draws username input
             ConsoleEx.SetPosition(ConsoleEx.Width / 3, ConsoleEx.Height / 2);
             ConsoleEx.Write("Username: ");
             ConsoleEx.Write(Username);

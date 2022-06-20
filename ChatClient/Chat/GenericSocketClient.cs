@@ -33,8 +33,11 @@ namespace ChatClientApp
 
             try
             {
+                // Connects client socket to server
                 clientSocket.Connect(new IPEndPoint(IPAddress, Port));
                 IsRunning = true;
+
+                // Start client socket thread
                 clientThread.Start();
             }
             catch (Exception ex)
@@ -47,33 +50,40 @@ namespace ChatClientApp
         {
             clientSocket.Send(Encoding.UTF8.GetBytes(request));
         }
-        protected abstract string InitialRequestData();
-        protected abstract void ClientInfo(string message);
-        protected abstract void IntialServerResponse(string response);
-        protected abstract void ServerResponse(string response);
 
         private void ClientThreadEntry()
         {
             ClientInfo($"Client started listening on port {Port}");
-            bool isInitial = true;
+            bool isFirstResponseAndRequest = true;
             while (IsRunning)
             {
+                // Receives latest server response
                 byte[] responseBuffer = new byte[MaxBufferSize];
                 int responseSize = clientSocket.Receive(responseBuffer);
 
-                if (isInitial)
+                if (!isFirstResponseAndRequest)
                 {
-                    IntialServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
-                    string initialRequestData = InitialRequestData();
-                    SendRequest(initialRequestData);
-                    isInitial = false;
-                    IsReady = true;
+                    // Calls server's response method
+                    ServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
                 }
                 else
                 {
-                    ServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
+                    // Calls server's initial response method
+                    IntialServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
+
+                    // Calls client's inital request method
+                    string initialRequestData = InitialRequestData();
+                    SendRequest(initialRequestData);
+
+                    isFirstResponseAndRequest = false;
+                    IsReady = true;
                 }
             }
         }
+
+        protected abstract string InitialRequestData();
+        protected abstract void ClientInfo(string message);
+        protected abstract void IntialServerResponse(string response);
+        protected abstract void ServerResponse(string response);
     }
 }

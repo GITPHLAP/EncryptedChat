@@ -18,9 +18,13 @@ namespace ChatClientApp.Views
 
         public override void Initialize()
         {
+            ConsoleEx.Create(128, 32);
+            ConsoleEx.SetFont("Consolas", 8, 16);
+
             username = ViewHandler.GetViewByKey<UsernameView>(ViewKey.Username).Username;
             chatClient = ViewHandler.GetViewByKey<ConnectingView>(ViewKey.Connecting).ChatClient;
             chatClient.MessageAdded += OnMessageAdded;
+            chatHeight = ConsoleEx.Height - 5;
         }
 
         public override void Logic()
@@ -45,6 +49,8 @@ namespace ChatClientApp.Views
             {
                 chatScrollIndex++;
             }
+
+            // Limits scroll index to be in range
             if (chatScrollIndex < 0)
             {
                 chatScrollIndex = 0;
@@ -57,23 +63,26 @@ namespace ChatClientApp.Views
 
         public override void Drawing()
         {
-            chatHeight = ConsoleEx.Height - 5;
 
+            // Draws chat messages
             for (int i = 0; i + chatScrollIndex < chatClient.Messages.Count; i++)
             {
                 ConsoleEx.WriteLine(chatClient.Messages[i + chatScrollIndex]);
             }
 
+            // Draws lower section seperation
             Draw.Color = CColor.Black;
             Draw.Rectangle(0, chatHeight, ConsoleEx.Width, ConsoleEx.Height, false, '.');
             Draw.Color = CColor.White;
             Draw.Line(0, chatHeight, ConsoleEx.Width, chatHeight, '═');
 
+            // Draws input message
             ConsoleEx.SetPosition(1, chatHeight + 2);
             ConsoleEx.Write("\faMessage: \ff");
             ConsoleEx.Write(currentMessage);
             ConsoleEx.Write("|");
 
+            // Draws key control hints
             ConsoleEx.SetPosition(0, ConsoleEx.Height - 1);
             ConsoleEx.Write("\feENTER: \ffSends message   \feARROW UP/DOWN: \ffScrolls chat");
 
@@ -83,6 +92,7 @@ namespace ChatClientApp.Views
 
         private void OnMessageAdded(object sender, EventArgs e)
         {
+            // Makes the chat scroll when the messages exceeds the line limit
             if (chatClient.Messages.Count > chatHeight)
             {
                 chatScrollIndex++;
