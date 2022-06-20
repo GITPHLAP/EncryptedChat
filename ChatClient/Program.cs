@@ -1,9 +1,6 @@
 ﻿using ChatClientApp.Chat;
 using ConsoleEngineCS.Core;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace ChatClientApp
 {
@@ -26,6 +23,10 @@ namespace ChatClientApp
                 if (username == null)
                 {
                     UsernameView();
+                }
+                else if (!chatClient.IsReady)
+                {
+                    ConnectingView();
                 }
                 else
                 {
@@ -57,6 +58,12 @@ namespace ChatClientApp
                 ConsoleEx.Create(128, 32);
                 ConsoleEx.SetFont("Consolas", 8, 16);
             }
+        }
+
+        static void ConnectingView()
+        {
+            ConsoleEx.SetPosition(ConsoleEx.Width / 3, ConsoleEx.Height / 2);
+            ConsoleEx.Write("Connecting...");
         }
 
         static void ChatView()

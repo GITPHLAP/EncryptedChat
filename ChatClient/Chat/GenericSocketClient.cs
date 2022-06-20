@@ -21,6 +21,7 @@ namespace ChatClientApp
         protected int MaxBufferSize { get; set; } = 8192;
         protected IPAddress IPAddress { get; set; } = null;
         protected ushort Port { get; set; } = 1000;
+        public bool IsReady = false;
 
         public void StartListen()
         {
@@ -46,8 +47,8 @@ namespace ChatClientApp
         {
             clientSocket.Send(Encoding.UTF8.GetBytes(request));
         }
-        protected abstract void ClientInfo(string message);
         protected abstract string InitialRequestData();
+        protected abstract void ClientInfo(string message);
         protected abstract void IntialServerResponse(string response);
         protected abstract void ServerResponse(string response);
 
@@ -57,11 +58,12 @@ namespace ChatClientApp
             bool isInitial = true;
             while (IsRunning)
             {
-                byte[] responseBuffer = new byte[MaxBufferSize];
-                int responseSize = clientSocket.Receive(responseBuffer);
+         
 
                 if (isInitial)
                 {
+                    byte[] responseBuffer = new byte[MaxBufferSize];
+                    int responseSize = clientSocket.Receive(responseBuffer);
                     IntialServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
                     string initialRequestData = InitialRequestData();
                     SendRequest(initialRequestData);
@@ -69,6 +71,9 @@ namespace ChatClientApp
                 }
                 else
                 {
+                    IsReady = true;
+                    byte[] responseBuffer = new byte[MaxBufferSize];
+                    int responseSize = clientSocket.Receive(responseBuffer);
                     ServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
                 }
             }
