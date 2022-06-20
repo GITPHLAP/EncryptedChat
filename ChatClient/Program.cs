@@ -91,7 +91,7 @@ namespace ChatClientApp
             ConsoleEx.Write("|");
 
             ConsoleEx.SetPosition(0, ConsoleEx.Height - 1);
-            ConsoleEx.Write("\feENTER: \ffSends message   \feARROW UP/DOWN: \ffScrolls chat   \feCTRL: \ffSend image");
+            ConsoleEx.Write("\feENTER: \ffSends message   \feARROW UP/DOWN: \ffScrolls chat");
 
             // Message input
             inputStr = Input.Read(inputStr);
