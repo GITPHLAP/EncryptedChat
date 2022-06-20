@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CryptoLibrary;
 
 namespace ChatClientServer
 {
@@ -17,6 +19,7 @@ namespace ChatClientServer
         Socket serverSocket;
         List<User> users = new List<User>();
         List<Thread> threads = new List<Thread>();
+        RSACryptoServiceProvider rsa = CryptoManager.GetKeyPair();
 
         public void Start(IPAddress address, int port)
         {
@@ -26,7 +29,7 @@ namespace ChatClientServer
             serverSocket = socket;
 
             serverSocket.Bind(ipe);
-            serverSocket.Listen(100);
+            serverSocket.Listen(50);
 
             running = true;
 
@@ -41,28 +44,10 @@ namespace ChatClientServer
                 try
                 {
                     clientSocket = serverSocket.Accept();
-                    //RequestHandler(clientSocket);
 
                     Console.WriteLine("Client connected");
 
-                    //Get the connection message from client
-                    string receivedJson = ReceiveFromSocket(clientSocket);
-
-
-                    ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
-                    User user = new User(clientSocket, pack.Name, pack.PublicKey);
-                    //User user = new User(clientSocket, "Jens", "1234");
-
-                    users.Add(user);
-
-                    //Create a thread for receiving messages from new the client
-                    Thread thread = new Thread(() => WaitForMessage(user));
-
-                    threads.Add(thread);
-
-                    thread.Start();
-
-                    Console.WriteLine("started thread");
+                    InitialConnection(clientSocket);
                 }
                 catch (Exception e)
                 {
@@ -71,6 +56,39 @@ namespace ChatClientServer
 
             }
         }
+
+        private void InitialConnection(Socket clientSocket)
+        {
+            try
+            {
+                //On connection, send servers public key
+                clientSocket.Send(Encoding.UTF8.GetBytes(rsa.ToXmlString(false)));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("COULD NOT SEND PUBLIC KEY TO CLIENT: "+ ex.Message);
+                return;
+            }
+
+            //Get the initial connection message from client
+            string receivedJson = ReceiveDecryptedMessage(clientSocket);
+
+            ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
+
+            User user = new User(clientSocket, pack.Name, pack.PublicKey);
+
+            users.Add(user);
+
+            //Create a thread for receiving messages from new the client
+            Thread thread = new Thread(() => WaitForMessage(user));
+
+            threads.Add(thread);
+
+            thread.Start();
+
+            Console.WriteLine("started thread");
+        }
+
         void WaitForMessage(User user)
         {
             //Run this while socket connected
@@ -78,15 +96,17 @@ namespace ChatClientServer
             {
                 while (user.ClientSocket.Connected)
                 {
-                    string socketMessage = ReceiveFromSocket(user.ClientSocket);
+                    string socketMessage = ReceiveDecryptedMessage(user.ClientSocket);
+
                     Console.WriteLine("Message received: " + socketMessage);
 
-                    //Decrypt message
-                    string messageToSend = $"{socketMessage}";
 
-                    //Send the message to all clients connected
+                    //Send the message to all clients connected excluding the sending client
                     foreach (var item in users.Where(x => x.ClientSocket.Connected == true && x != user))
                     {
+                        //Encrypt the message with the user public key
+                        string messageToSend = CryptoManager.EncryptString(user.Rsa,socketMessage);
+
                         try
                         {
                             //TODO: Decrypt message with the users own public key
@@ -120,55 +140,13 @@ namespace ChatClientServer
 
         }
 
-        void RequestHandler(Socket clientSocket)
+        string ReceiveDecryptedMessage(Socket client)
         {
-            try
-            {
-                Console.WriteLine("RECEIVING MESSAGE");
-                byte[] buffer = new byte[256];
-                int receivedBCount = clientSocket.Receive(buffer);
-                string receivedStr = Encoding.UTF8.GetString(buffer, 0, receivedBCount);
+            string socketMessage = ReceiveFromSocket(client);
 
-                //Get the method by getting the part of the string where method is written
-                string httpMethod = receivedStr.Substring(0, receivedStr.IndexOf(" "));
-                Console.WriteLine("SENDING RESPONSE");
-                switch (httpMethod)
-                {
-                    case "GET":
-                        sendResponse(clientSocket, "hello", "200 OK", "text/html");
-                        break;
-                    case "POST":
-                        //If someone posts they should get an error response
-                        sendResponse(clientSocket, "Post", "418 I'm a teapot", "text/html");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("OOPSS, ", e.Message);
-            }
-        }
+            //Decrypt with servers private key
+            return CryptoManager.DecryptString(rsa, socketMessage);
 
-
-        void sendResponse(Socket socket, string message, string responseCode, string contentType)
-        {
-            //Here we put the message into the html
-            string htmlMessage = $"<html><head><meta http - equiv =\"Content-Type\" content=\"text/html; charset = utf-8\"></head><body><div>{message}</div></body></html>";
-
-
-            //Create the header for http response
-            byte[] header = Encoding.UTF8.GetBytes($"HTTP/1.1 " + responseCode + "\r\n"
-                          + "Server: Kaspers big server\r\n"
-                          + "Content-Length: " + htmlMessage.Length.ToString() + "\r\n"
-                          + "Connection: close\r\n"
-                          + "Content-Type: " + contentType + "\r\n\r\n");
-
-            //Send the header
-            socket.Send(header);
-            //Send content
-            socket.Send(Encoding.UTF8.GetBytes(htmlMessage));
         }
     }
 }
