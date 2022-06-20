@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CryptoLibrary
 {
-    public class CryptoManager
+    public static class CryptoManager
     {
         /// <summary>
         /// Create private/public key pair 
