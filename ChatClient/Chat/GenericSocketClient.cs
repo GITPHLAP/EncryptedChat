@@ -48,20 +48,29 @@ namespace ChatClientApp
         }
         protected abstract void ClientInfo(string message);
         protected abstract string InitialRequestData();
+        protected abstract void IntialServerResponse(string response);
         protected abstract void ServerResponse(string response);
 
         private void ClientThreadEntry()
         {
             ClientInfo($"Client started listening on port {Port}");
-
-            string initialRequestData = InitialRequestData();
-            SendRequest(initialRequestData);
+            bool isInitial = true;
             while (IsRunning)
             {
                 byte[] responseBuffer = new byte[MaxBufferSize];
                 int responseSize = clientSocket.Receive(responseBuffer);
 
-                ServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
+                if (isInitial)
+                {
+                    IntialServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
+                    string initialRequestData = InitialRequestData();
+                    SendRequest(initialRequestData);
+                    isInitial = false;
+                }
+                else
+                {
+                    ServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
+                }
             }
         }
     }
