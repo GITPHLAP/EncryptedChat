@@ -25,6 +25,7 @@ namespace ChatClientApp.Chat
         }
 
         public List<string> Messages { get; private set; } = new List<string>();
+        public List<string> ClientInfoMessages { get; private set; } = new List<string>();
 
         public void SendMessage(string message)
         {
@@ -35,7 +36,7 @@ namespace ChatClientApp.Chat
 
         protected override void ClientInfo(string message)
         {
-            ////Console.WriteLine($"<{DateTime.Now}> " + message);
+            ClientInfoMessages.Add($"<{DateTime.Now}> " + message);
         }
 
         protected override string InitialRequestData()

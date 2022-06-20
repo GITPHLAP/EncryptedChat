@@ -62,8 +62,13 @@ namespace ChatClientApp
 
         static void ConnectingView()
         {
+            for (int i = 0; i < chatClient.ClientInfoMessages.Count; i++)
+            {
+                ConsoleEx.WriteLine(chatClient.ClientInfoMessages[i]);
+            }
+
             ConsoleEx.SetPosition(ConsoleEx.Width / 3, ConsoleEx.Height / 2);
-            ConsoleEx.Write("Connecting...");
+            ConsoleEx.Write("\faConnecting...");
         }
 
         static void ChatView()
