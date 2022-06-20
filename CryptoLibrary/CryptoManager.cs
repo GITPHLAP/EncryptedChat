@@ -16,7 +16,7 @@ namespace CryptoLibrary
             RSACryptoServiceProvider _rsa;
 
             // Create both public and private key
-            _rsa = new RSACryptoServiceProvider(2048);
+            _rsa = new RSACryptoServiceProvider(4096);
 
             return _rsa;
         }
@@ -30,7 +30,7 @@ namespace CryptoLibrary
         public static RSACryptoServiceProvider GetPublicKeyProvider(string publicKey)
         {
 
-            RSACryptoServiceProvider _rsa = new RSACryptoServiceProvider(2048);
+            RSACryptoServiceProvider _rsa = new RSACryptoServiceProvider(4096);
 
             // Import public key 
             _rsa.FromXmlString(publicKey);
