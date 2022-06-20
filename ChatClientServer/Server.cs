@@ -105,7 +105,7 @@ namespace ChatClientServer
                     foreach (var item in users.Where(x => x.ClientSocket.Connected == true && x != user))
                     {
                         //Encrypt the message with the user public key
-                        string messageToSend = CryptoManager.EncryptString(user.Rsa,socketMessage);
+                        string messageToSend = CryptoManager.EncryptString(item.Rsa,socketMessage);
 
                         try
                         {
