@@ -18,7 +18,6 @@ namespace ChatClientServer
         bool running = false;
         Socket serverSocket;
         List<User> users = new List<User>();
-        List<Thread> threads = new List<Thread>();
         RSACryptoServiceProvider rsa = CryptoManager.GetKeyPair();
 
         public void Start(IPAddress address, int port)
@@ -57,6 +56,10 @@ namespace ChatClientServer
             }
         }
 
+        /// <summary>
+        /// Exchanges public keys with client and receives initial package from client, then starts listening for messages
+        /// </summary>
+        /// <param name="clientSocket"></param>
         private void InitialConnection(Socket clientSocket)
         {
             try
@@ -81,8 +84,6 @@ namespace ChatClientServer
 
             //Create a thread for receiving messages from new the client
             Thread thread = new Thread(() => WaitForMessage(user));
-
-            threads.Add(thread);
 
             thread.Start();
 
