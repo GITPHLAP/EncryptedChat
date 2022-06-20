@@ -1,7 +1,9 @@
 ﻿using ChatModels;
+using CryptoLibrary;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace ChatClientApp.Chat
 {
@@ -9,10 +11,13 @@ namespace ChatClientApp.Chat
     {
         public event EventHandler MessageAdded;
         private readonly string name;
+        private RSACryptoServiceProvider serverPublicKey = null;
+        private RSACryptoServiceProvider clientPrivateKey = null;
 
         public ChatClient(string name)
         {
-            IPAddress = System.Net.IPAddress.Parse("80.71.140.165");
+            //IPAddress = System.Net.IPAddress.Parse("80.71.140.165");
+            IPAddress = IPAddressUtillity.GetLocalIPAddress();
             Port = 11753;
             MaxBufferSize = 1024;
             this.name = name;
@@ -22,7 +27,7 @@ namespace ChatClientApp.Chat
 
         public void SendMessage(string message)
         {
-            SendRequest(message);
+            SendRequest(CryptoManager.EncryptString(serverPublicKey, message));
             Messages.Add(message);
             MessageAdded?.Invoke(this, EventArgs.Empty);
         }
@@ -34,18 +39,24 @@ namespace ChatClientApp.Chat
 
         protected override string InitialRequestData()
         {
+            clientPrivateKey = CryptoManager.GetKeyPair();
             ConnectionPackage connectionPackage = new()
             {
                 Name = name,
-                PublicKey = "xyz"
+                PublicKey = clientPrivateKey.ToXmlString(false),
             };
-            return JsonConvert.SerializeObject(connectionPackage);
+            return CryptoManager.EncryptString(serverPublicKey, JsonConvert.SerializeObject(connectionPackage));
         }
 
         protected override void ServerResponse(string response)
         {
-            Messages.Add(response);
+            Messages.Add(CryptoManager.DecryptString(clientPrivateKey, response));
             MessageAdded?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected override void IntialServerResponse(string response)
+        {
+            serverPublicKey = CryptoManager.GetPublicKeyProvider(response);
         }
     }
 }

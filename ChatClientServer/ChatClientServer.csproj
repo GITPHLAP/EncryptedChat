@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ChatModels\ChatModels.csproj" />
+    <ProjectReference Include="..\CryptoLibrary\CryptoLibrary.csproj" />
   </ItemGroup>
 
 </Project>
