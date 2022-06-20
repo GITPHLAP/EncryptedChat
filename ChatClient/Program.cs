@@ -1,5 +1,4 @@
-﻿using CharacterImageLib;
-using ChatClientApp.Chat;
+﻿using ChatClientApp.Chat;
 using ConsoleEngineCS.Core;
 using Newtonsoft.Json;
 using System;
@@ -66,16 +65,7 @@ namespace ChatClientApp
 
             for (int i = 0; i + chatSrollIndex < chatClient.Messages.Count; i++)
             {
-                string message = chatClient.Messages[i + chatSrollIndex];
-                if (message.StartsWith("IMAGE"))
-                {
-                    message.Replace("IMAGE", "");
-                    CharacterImage characterImage = CharacterImage.FromString(message);
-                }
-                else
-                {
-                    ConsoleEx.WriteLine(chatClient.Messages[i + chatSrollIndex]);
-                }
+                ConsoleEx.WriteLine(chatClient.Messages[i + chatSrollIndex]);
             }
 
             Draw.Color = CColor.Black;
@@ -102,19 +92,6 @@ namespace ChatClientApp
                 inputStr = "";
             }
 
-            // Send image input
-            //if (Input.KeyPressed(Key.Control))
-            //{
-            //    OpenFileDialog openFileDialog = new OpenFileDialog();
-            //    openFileDialog.ShowDialog();
-            //    if (!openFileDialog.CheckFileExists)
-            //    {
-            //        return;
-            //    }
-            //    CharacterImage characterImage = CharacterImageReader.LoadFromImage(openFileDialog.FileName);
-            //    chatClient.SendMessage("IMAGE" + characterImage.ToString());
-            //}
-
             // Scroll Input
             if (Input.KeyStateDelayed(Key.Up, 75))
             {
@@ -139,18 +116,6 @@ namespace ChatClientApp
             if (chatClient.Messages.Count > chatHeight)
             {
                 chatSrollIndex++;
-            }
-        }
-
-        static void DrawCharacterImage(int xPos, int yPos, CharacterImage characterImage)
-        {
-            for (int y = 0; y < characterImage.Height; y++)
-            {
-                for (int x = 0; x < characterImage.Width; x++)
-                {
-                    CharacterPixel characterPixel = characterImage.CharacterPixels[y * characterImage.Width + x];
-                    ConsoleEx.WriteCharacter(x + xPos, y + yPos, characterPixel.Character, characterPixel.Color);
-                }
             }
         }
     }
