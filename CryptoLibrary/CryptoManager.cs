@@ -30,7 +30,7 @@ namespace CryptoLibrary
         public static RSACryptoServiceProvider GetPublicKeyProvider(string publicKey)
         {
 
-            RSACryptoServiceProvider _rsa = new RSACryptoServiceProvider(4096);
+            RSACryptoServiceProvider _rsa = new(4096);
 
             // Import public key 
             _rsa.FromXmlString(publicKey);
@@ -46,7 +46,7 @@ namespace CryptoLibrary
         /// <returns>Encrypted base64 string</returns>
         public static string EncryptString(RSACryptoServiceProvider _rsa, string message)
         {
-            byte[] encryptedMsg = _rsa.Encrypt(Encoding.UTF8.GetBytes(message), RSAEncryptionPadding.Pkcs1);
+            byte[] encryptedMsg = _rsa.Encrypt(Encoding.UTF8.GetBytes(message), true);
             return Convert.ToBase64String(encryptedMsg);
         }
 
@@ -58,8 +58,7 @@ namespace CryptoLibrary
         /// <returns>Decrypted message</returns>
         public static string DecryptString(RSACryptoServiceProvider _rsa, string encryptedMsg)
         {
-            byte[] decryptedMsg = _rsa.Decrypt(Convert.FromBase64String(encryptedMsg), RSAEncryptionPadding.Pkcs1);
-
+            byte[] decryptedMsg = _rsa.Decrypt(Convert.FromBase64String(encryptedMsg), true);
             return Encoding.UTF8.GetString(decryptedMsg);
         }
 
