@@ -8,6 +8,7 @@ namespace CryptoLibrary
     {
         /// <summary>
         /// Create private/public key pair 
+        /// When 
         /// </summary>
         /// <returns>Public/Private Keypair</returns>
         public static RSACryptoServiceProvider GetKeyPair()
@@ -22,22 +23,17 @@ namespace CryptoLibrary
 
 
         /// <summary>
-        /// <inheritdoc cref="GetKeyPair"/>
-        /// With the defined publickey
+        /// Use to create a provider to encrypt a message
         /// </summary>
         /// <param name="publicKey"> XML string of the public key</param>
         /// <returns>Public/Private Keypair</returns>
-        public static RSACryptoServiceProvider GetKeyPair(string publicKey)
+        public static RSACryptoServiceProvider GetPublicKeyProvider(string publicKey)
         {
-            RSACryptoServiceProvider _rsa;
+
+            RSACryptoServiceProvider _rsa = new RSACryptoServiceProvider(2048);
 
             // Import public key 
-            _rsa = new RSACryptoServiceProvider(2048);
             _rsa.FromXmlString(publicKey);
-
-
-            // Create private key part 
-            _rsa = new RSACryptoServiceProvider(2048);
 
             return _rsa;
         }
