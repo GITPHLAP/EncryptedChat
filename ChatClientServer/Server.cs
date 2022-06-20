@@ -71,7 +71,7 @@ namespace ChatClientServer
             }
 
             //Get the initial connection message from client
-            string receivedJson = ReceiveDecryptedMessage(clientSocket);
+            string receivedJson = ReceiveFromSocket(clientSocket);
 
             ConnectionPackage pack = JsonConvert.DeserializeObject<ConnectionPackage>(receivedJson);
 
@@ -131,7 +131,7 @@ namespace ChatClientServer
         }
         string ReceiveFromSocket(Socket client)
         {
-            byte[] buffer = new byte[256];
+            byte[] buffer = new byte[8192];
             //Wait for messsage from client
             int receivedBCount = client.Receive(buffer);
 

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace ChatClientApp.Chat
 {
@@ -45,7 +46,7 @@ namespace ChatClientApp.Chat
                 Name = name,
                 PublicKey = clientPrivateKey.ToXmlString(false),
             };
-            return CryptoManager.EncryptString(serverPublicKey, JsonConvert.SerializeObject(connectionPackage));
+            return JsonConvert.SerializeObject(connectionPackage);
         }
 
         protected override void ServerResponse(string response)
