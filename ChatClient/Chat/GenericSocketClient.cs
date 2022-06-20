@@ -58,22 +58,19 @@ namespace ChatClientApp
             bool isInitial = true;
             while (IsRunning)
             {
-         
+                byte[] responseBuffer = new byte[MaxBufferSize];
+                int responseSize = clientSocket.Receive(responseBuffer);
 
                 if (isInitial)
                 {
-                    byte[] responseBuffer = new byte[MaxBufferSize];
-                    int responseSize = clientSocket.Receive(responseBuffer);
                     IntialServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
                     string initialRequestData = InitialRequestData();
                     SendRequest(initialRequestData);
                     isInitial = false;
+                    IsReady = true;
                 }
                 else
                 {
-                    IsReady = true;
-                    byte[] responseBuffer = new byte[MaxBufferSize];
-                    int responseSize = clientSocket.Receive(responseBuffer);
                     ServerResponse(Encoding.UTF8.GetString(responseBuffer, 0, responseSize));
                 }
             }

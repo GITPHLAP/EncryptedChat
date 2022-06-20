@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace ChatClientApp.Chat
 {
@@ -17,7 +16,6 @@ namespace ChatClientApp.Chat
 
         public ChatClient(string name)
         {
-            //IPAddress = System.Net.IPAddress.Parse("80.71.140.165");
             IPAddress = IPAddressUtillity.GetLocalIPAddress();
             Port = 11753;
             MaxBufferSize = 1024;

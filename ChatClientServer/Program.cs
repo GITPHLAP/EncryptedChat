@@ -6,7 +6,7 @@ namespace ChatClientServer
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             Console.WriteLine("Hello World!");
             Server server = new Server();
