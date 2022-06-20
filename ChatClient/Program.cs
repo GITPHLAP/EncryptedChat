@@ -1,6 +1,10 @@
-﻿using ChatClientApp.Chat;
-using Engine;
+﻿using CharacterImageLib;
+using ChatClientApp.Chat;
+using ConsoleEngineCS.Core;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace ChatClientApp
 {
@@ -8,12 +12,13 @@ namespace ChatClientApp
     {
         static string username = null;
         static string inputStr = "";
-        static List<string> messages = new List<string>();
         static ChatClient chatClient = null;
+        static int chatSrollIndex = 0;
+        static int chatHeight = 0;
 
+        [STAThread]
         static void Main()
         {
-
             ConsoleEx.Create(64, 16);
             ConsoleEx.SetFont("Consolas", 16, 32);
 
@@ -41,12 +46,13 @@ namespace ChatClientApp
             ConsoleEx.Write(inputStr);
             ConsoleEx.Write("|");
 
-            if (Input.KeyPressed(Key.RETURN))
+            if (Input.KeyPressed(Key.Enter))
             {
                 username = inputStr;
                 inputStr = "";
 
                 chatClient = new ChatClient(username);
+                chatClient.MessageAdded += OnMessageAdded;
                 chatClient.StartListen();
 
                 ConsoleEx.Create(128, 32);
@@ -56,26 +62,96 @@ namespace ChatClientApp
 
         static void ChatView()
         {
-            foreach (string message in chatClient.Messages)
+            chatHeight = ConsoleEx.Height - 5;
+
+            for (int i = 0; i + chatSrollIndex < chatClient.Messages.Count; i++)
             {
-                ConsoleEx.WriteLine(message);
+                string message = chatClient.Messages[i + chatSrollIndex];
+                if (message.StartsWith("IMAGE"))
+                {
+                    message.Replace("IMAGE", "");
+                    CharacterImage characterImage = CharacterImage.FromString(message);
+                }
+                else
+                {
+                    ConsoleEx.WriteLine(chatClient.Messages[i + chatSrollIndex]);
+                }
             }
 
-            Draw.Rectangle(0, (int)(ConsoleEx.Height / 1.5f), ConsoleEx.Width, ConsoleEx.Height, false, '.', 0);
-            Draw.Line(0, (int)(ConsoleEx.Height / 1.5f), ConsoleEx.Width, (int)(ConsoleEx.Height / 1.5f), '═');
+            Draw.Color = CColor.Black;
+            Draw.Rectangle(0, chatHeight, ConsoleEx.Width, ConsoleEx.Height, false, '.');
+            Draw.Color = CColor.White;
+            Draw.Line(0, chatHeight, ConsoleEx.Width, chatHeight, '═');
 
-            if (Input.KeyPressed(Key.RETURN))
+            ConsoleEx.SetPosition(1, chatHeight + 2);
+            ConsoleEx.Write("\faMessage: \ff");
+            ConsoleEx.Write(inputStr);
+            ConsoleEx.Write("|");
+
+            ConsoleEx.SetPosition(0, ConsoleEx.Height - 1);
+            ConsoleEx.Write("\feENTER: \ffSends message   \feARROW UP/DOWN: \ffScrolls chat   \feCTRL: \ffSend image");
+
+            // Message input
+            inputStr = Input.Read(inputStr);
+
+            // Send message input
+            if (Input.KeyPressed(Key.Enter))
             {
-                string message = username + ": " + inputStr;
+                string message = $"\ff<{DateTime.Now.ToLongTimeString()}> \fb[{username}]\ff: {inputStr}";
                 chatClient.SendMessage(message);
                 inputStr = "";
             }
 
-            inputStr = Input.Read(inputStr);
-            ConsoleEx.SetPosition(1, (int)(ConsoleEx.Height / 1.5f) + 2);
-            ConsoleEx.Write("Message: ");
-            ConsoleEx.Write(inputStr);
-            ConsoleEx.Write("|");
+            // Send image input
+            //if (Input.KeyPressed(Key.Control))
+            //{
+            //    OpenFileDialog openFileDialog = new OpenFileDialog();
+            //    openFileDialog.ShowDialog();
+            //    if (!openFileDialog.CheckFileExists)
+            //    {
+            //        return;
+            //    }
+            //    CharacterImage characterImage = CharacterImageReader.LoadFromImage(openFileDialog.FileName);
+            //    chatClient.SendMessage("IMAGE" + characterImage.ToString());
+            //}
+
+            // Scroll Input
+            if (Input.KeyStateDelayed(Key.Up, 75))
+            {
+                chatSrollIndex--;
+            }
+            if (Input.KeyStateDelayed(Key.Down, 75))
+            {
+                chatSrollIndex++;
+            }
+            if (chatSrollIndex < 0)
+            {
+                chatSrollIndex = 0;
+            }
+            if (chatSrollIndex > chatClient.Messages.Count)
+            {
+                chatSrollIndex = chatClient.Messages.Count;
+            }
+        }
+
+        static void OnMessageAdded(object sender, EventArgs e)
+        {
+            if (chatClient.Messages.Count > chatHeight)
+            {
+                chatSrollIndex++;
+            }
+        }
+
+        static void DrawCharacterImage(int xPos, int yPos, CharacterImage characterImage)
+        {
+            for (int y = 0; y < characterImage.Height; y++)
+            {
+                for (int x = 0; x < characterImage.Width; x++)
+                {
+                    CharacterPixel characterPixel = characterImage.CharacterPixels[y * characterImage.Width + x];
+                    ConsoleEx.WriteCharacter(x + xPos, y + yPos, characterPixel.Character, characterPixel.Color);
+                }
+            }
         }
     }
 }
