@@ -7,6 +7,7 @@ namespace ChatClientApp.Chat
 {
     internal class ChatClient : GenericSocketClient
     {
+        public event EventHandler MessageAdded;
         private readonly string name;
 
         public ChatClient(string name)
@@ -17,12 +18,13 @@ namespace ChatClientApp.Chat
             this.name = name;
         }
 
-        public Queue<string> Messages { get; private set; } = new Queue<string>();
+        public List<string> Messages { get; private set; } = new List<string>();
 
         public void SendMessage(string message)
         {
             SendRequest(message);
-            Messages.Enqueue(message);
+            Messages.Add(message);
+            MessageAdded?.Invoke(this, EventArgs.Empty);
         }
 
         protected override void ClientInfo(string message)
@@ -42,7 +44,8 @@ namespace ChatClientApp.Chat
 
         protected override void ServerResponse(string response)
         {
-            Messages.Enqueue(response);
+            Messages.Add(response);
+            MessageAdded?.Invoke(this, EventArgs.Empty);
         }
     }
 }
