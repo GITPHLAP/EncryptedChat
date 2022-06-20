@@ -17,7 +17,6 @@ namespace CryptoLibrary
 
             // Create both public and private key
             _rsa = new RSACryptoServiceProvider(4096);
-            _rsa.PersistKeyInCsp = false;
 
             return _rsa;
         }
@@ -47,7 +46,7 @@ namespace CryptoLibrary
         /// <returns>Encrypted base64 string</returns>
         public static string EncryptString(RSACryptoServiceProvider _rsa, string message)
         {
-            byte[] encryptedMsg = _rsa.Encrypt(Encoding.UTF8.GetBytes(message), false);
+            byte[] encryptedMsg = _rsa.Encrypt(Encoding.UTF8.GetBytes(message), RSAEncryptionPadding.Pkcs1);
             return Convert.ToBase64String(encryptedMsg);
         }
 
@@ -59,7 +58,7 @@ namespace CryptoLibrary
         /// <returns>Decrypted message</returns>
         public static string DecryptString(RSACryptoServiceProvider _rsa, string encryptedMsg)
         {
-            byte[] decryptedMsg = _rsa.Decrypt(Convert.FromBase64String(encryptedMsg), false);
+            byte[] decryptedMsg = _rsa.Decrypt(Convert.FromBase64String(encryptedMsg), RSAEncryptionPadding.Pkcs1);
 
             return Encoding.UTF8.GetString(decryptedMsg);
         }
